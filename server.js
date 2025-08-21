@@ -12,7 +12,6 @@ dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use('/videos', express.static('videos'));  // Serve videos
 
 // Sequelize setup
 const sequelize = new Sequelize(`postgres://appuser:${process.env.DB_PASSWORD}@localhost:5432/videoapp`, {
@@ -84,6 +83,10 @@ app.get('/videos', async (req, res) => {
   }
 });
 
+// Static file serving for uploaded videos (moved after GET route)
+app.use('/videos', express.static('videos', { redirect: false })); // Disable redirect behavior
+
+// Other routes
 app.get('/recommended', async (req, res) => {
   try {
     const videos = await Video.findAll({ order: [['recommendationsScore', 'DESC']], limit: 20 });
@@ -203,6 +206,7 @@ app.post('/duets', authMiddleware, upload.single('video'), async (req, res) => {
 
 // Catch-all for undefined routes
 app.use((req, res) => {
+  console.log(`404 for ${req.url}`);
   res.status(404).json({ error: 'Route not found' });
 });
 
