@@ -24,7 +24,7 @@ const User = sequelize.define('User', {
   email: { type: Sequelize.STRING, unique: true },
   password: Sequelize.STRING,
   username: Sequelize.STRING,
-  followers: { type: Sequelize.JSON, defaultValue: [] },  // Store as JSON for simplicity
+  followers: { type: Sequelize.JSON, defaultValue: [] },
   following: { type: Sequelize.JSON, defaultValue: [] },
 });
 
@@ -141,7 +141,7 @@ app.post('/duets', authMiddleware, upload.single('video'), async (req, res) => {
   const { caption } = req.body;
   const video = await Video.create({
     url: `/videos/${req.file.filename}`,
-    caption: caption + ' (Duet)',  // Simple duet marker
+    caption: caption + ' (Duet)',
     userId: req.user.id,
     timestamp: new Date(),
     recommendationsScore: 0,
