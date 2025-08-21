@@ -1,5 +1,5 @@
 const express = require('express');
-const { Sequelize, DataTypes } = require('sequelize');
+const Sequelize = require('sequelize');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
@@ -21,28 +21,28 @@ const sequelize = new Sequelize(`postgres://appuser:${process.env.DB_PASSWORD}@l
 
 // Models
 const User = sequelize.define('User', {
-  email: { type: DataTypes.STRING, unique: true },
-  password: DataTypes.STRING,
-  username: DataTypes.STRING,
-  followers: { type: DataTypes.JSON, defaultValue: [] },  // Store as JSON for simplicity
-  following: { type: DataTypes.JSON, defaultValue: [] },
+  email: { type: Sequelize.STRING, unique: true },
+  password: Sequelize.STRING,
+  username: Sequelize.STRING,
+  followers: { type: Sequelize.JSON, defaultValue: [] },  // Store as JSON for simplicity
+  following: { type: Sequelize.JSON, defaultValue: [] },
 });
 
 const Video = sequelize.define('Video', {
-  url: DataTypes.STRING,
-  caption: DataTypes.STRING,
-  userId: DataTypes.INTEGER,
-  likes: { type: DataTypes.INTEGER, defaultValue: 0 },
-  views: { type: DataTypes.INTEGER, defaultValue: 0 },
-  timestamp: DataTypes.DATE,
-  recommendationsScore: { type: DataTypes.FLOAT, defaultValue: 0 },
+  url: Sequelize.STRING,
+  caption: Sequelize.STRING,
+  userId: Sequelize.INTEGER,
+  likes: { type: Sequelize.INTEGER, defaultValue: 0 },
+  views: { type: Sequelize.INTEGER, defaultValue: 0 },
+  timestamp: Sequelize.DATE,
+  recommendationsScore: { type: Sequelize.FLOAT, defaultValue: 0 },
 });
 
 const Comment = sequelize.define('Comment', {
-  videoId: DataTypes.INTEGER,
-  userId: DataTypes.INTEGER,
-  text: DataTypes.STRING,
-  timestamp: DataTypes.DATE,
+  videoId: Sequelize.INTEGER,
+  userId: Sequelize.INTEGER,
+  text: Sequelize.STRING,
+  timestamp: Sequelize.DATE,
 });
 
 // Relationships
@@ -149,4 +149,4 @@ app.post('/duets', authMiddleware, upload.single('video'), async (req, res) => {
   res.send(video);
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.listen(3000, '0.0.0.0', () => console.log('Server running on port 3000'));
